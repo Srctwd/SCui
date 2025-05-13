@@ -2,6 +2,7 @@ local function Hide()
 
     exp_bar_hight = 8
 
+    MainMenuBar:SetScale(0.9)
 	MainMenuBarLeftEndCap:Hide()
     MainMenuBarRightEndCap:Hide()
     MainMenuBarTexture0:Hide()
@@ -185,19 +186,23 @@ local function Hide()
     CharacterBag2Slot:SetAlpha(0)
     CharacterBag3Slot:SetAlpha(0)
 
+    ChatFrame1:SetScale(1)
+    --ChatFrame1:ClearAllPoints()
+    --ChatFrame1:SetPoint("BOTTOMLEFT", PlayerFrame, "BOTTOMLEFT", -50, -400)
+    
     --CastingBar
-    CastingBarFrame:SetScale(1)
+    CastingBarFrame:SetScale(0.8)
     CastingBarFrame:SetWidth(130)
     CastingBarFrame.Border:SetScale(0.98)
     CastingBarFrame:ClearAllPoints()
-    CastingBarFrame:SetPoint("BOTTOMRIGHT", PlayerFrame, "BOTTOMRIGHT", -11, 30)
+    CastingBarFrame:SetPoint("BOTTOMRIGHT", PlayerFrame, "BOTTOMRIGHT", -12, 30)
     CastingBarFrame.Border:SetVertexColor(0.21, 0.21, 0.21, 1)
     CastingBarFrame.Icon:Hide()
     
 
     --PlayerFrame
-    PlayerFrame:SetScale(1.2)
-    TargetFrame:SetScale(1.2)
+    PlayerFrame:SetScale(1)
+    TargetFrame:SetScale(1)
     PlayerFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-NoMana.blp")
     PlayerFrameTexture:SetVertexOffset(1, 37, -7)
     PlayerFrameTexture:SetVertexOffset(2, 37, -7)
@@ -227,15 +232,28 @@ local function Hide()
     PlayerFrameBackground:SetHeight(28)
 
     TargetFrameHealthBar:ClearAllPoints()
-    TargetFrameHealthBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 18.4)
+    TargetFrameHealthBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 17.5)
     TargetFrameHealthBar:SetHeight(16)
 
     TargetFrameManaBar:ClearAllPoints()
-    TargetFrameManaBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 5)
+    TargetFrameManaBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 3.8)
+    TargetFrameHealthBar:SetHeight(16)
 
     TargetFrameSpellBar:ClearAllPoints()
-    TargetFrameSpellBar:SetPoint("BOTTOMRIGHT", TargetFrame, "BOTTOMRIGHT", -11, 30)
-    TargetFrameSpellBar:SetHeight(16)
+
+    TargetFrameSpellBar:SetScale(0.8)
+    TargetFrameSpellBar:SetWidth(130)
+    TargetFrameSpellBar.Border:SetScale(0.98)
+    TargetFrameSpellBar.Border:SetVertexColor(0.21, 0.21, 0.21, 1)
+    TargetFrameSpellBar.Icon:Hide()
+
+
+    TargetFrameToTTextureFrameTexture:SetVertexColor(0.21, 0.21, 0.42, 0.9)
+    TargetFrameToT:ClearAllPoints()
+    TargetFrameToT:SetPoint("BOTTOMRIGHT", TargetFrame, "BOTTOMRIGHT", -40, -5)
+
+    TargetFrameTextureFramePVPIcon:SetVertexColor(0.21, 0.21, 0.42, 0.9)
+    TargetFramePortrait:SetVertexColor(0.9, 0.9, 0.9, 0.82)
 
     --Party Frame
     PartyMemberFrame1:SetScale(1.2)
@@ -246,18 +264,37 @@ local function Hide()
     PartyMemberFrame2Texture:SetVertexColor(0.21,0.21,0.42)
     PartyMemberFrame3Texture:SetVertexColor(0.21,0.21,0.42)
     PartyMemberFrame4Texture:SetVertexColor(0.21,0.21,0.42)
+
     
 end
 
 local function target_frame()
-    TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-NoMana.blp")
-    TargetFrameTextureFrameTexture:SetVertexOffset(1, -37, -7)
-    TargetFrameTextureFrameTexture:SetVertexOffset(2, -37, -7)
-    TargetFrameTextureFrameTexture:SetVertexOffset(3, -37, -7)
-    TargetFrameTextureFrameTexture:SetVertexOffset(4, -37, -7)
+    if (UnitClassification("target") == "normal") then
+        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-NoMana.blp")
+        TargetFrameTextureFrameTexture:SetVertexOffset(1, -37, -7)
+        TargetFrameTextureFrameTexture:SetVertexOffset(2, -37, -7)
+        TargetFrameTextureFrameTexture:SetVertexOffset(3, -37, -7)
+        TargetFrameTextureFrameTexture:SetVertexOffset(4, -37, -7)
+
+    end
+    if (UnitClassification("target") == "elite") then
+        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-EliteE.blp")    
+        TargetFrameTextureFrameTexture:SetVertexOffset(1, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(2, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(3, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(4, 0, 0)
+    end
+    if (UnitClassification("target") == "worldboss") then
+        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-EliteE.blp")    
+        TargetFrameTextureFrameTexture:SetVertexOffset(1, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(2, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(3, 0, 0)
+        TargetFrameTextureFrameTexture:SetVertexOffset(4, 0, 0)
+    end
+
     TargetFrameTextureFrameTexture:SetVertexColor(0.21, 0.21, 0.42, 0.9)
     TargetFrameNameBackground:SetAlpha(0)
-    TargetFrameBackground:SetHeight(28)
+    TargetFrameBackground:SetHeight(30)
     TargetFrameBackground:ClearAllPoints()
     TargetFrameBackground:SetPoint("CENTER", TargetFrame, "CENTER", -50, 13)
 end
@@ -270,12 +307,171 @@ local frame2 = CreateFrame("Frame")
 frame2:RegisterEvent("PLAYER_TARGET_CHANGED")
 frame2:SetScript("OnEvent", target_frame)
 
+--local f = CreateFrame("Frame")
+--f:RegisterEvent("PLAYER_REGEN_ENABLED")
+--f:RegisterEvent("PLAYER_REGEN_DISABLED")
+--f:SetScript("OnEvent", function(self, event)
+--	print("1")
+--end)
 
+SlashCmdList["CLEAR"] = function()
+    SELECTED_CHAT_FRAME:Clear()
+end
 
---Vespasianus
---Lucylight
---Scantron
---Terrysuffers
---terranigma
---hardcorehank
---mcsneakyolo
+----local function combat_log(self, event)
+----	arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 = CombatLogGetCurrentEventInfo()
+----    if arg5 == "Botinha" then
+----        print(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)
+----    end
+----    --print(arg1, arg2, arg3, arg4, arg5)
+----end
+--
+--local f = CreateFrame("Frame")
+--f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+--f:RegisterEvent("PLAYER_REGEN_ENABLED")
+--f:RegisterEvent("PLAYER_REGEN_DISABLED")
+--f:SetScript("OnEvent", combat_log)
+--
+--
+--local messages = {} -- Table to store messages
+--
+--local function logMessage(message)
+--    table.insert(messages, message) -- Add the message to the table
+--end
+--
+--local function printMessages()
+--    if #messages > 0 then
+--        print(table.concat(messages, " | ")) -- Concatenate messages with " | " as the separator
+--        messages = {}
+--    else
+--        print("No messages to display.")
+--    end
+--end
+--
+--local f = CreateFrame("Frame")
+---- No need for 'global', just declare the variable
+--message = {"","","","",""}  -- Same for 'message'
+--combat = "○" --ok
+--casting = "○" --ok
+--not_facing = "○" --ok
+--out_of_range = "○"
+--target = "○"
+--kills = "○"
+--reward_a = "■"
+--reward_b = "■"
+--
+---- Register events
+--f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+--f:RegisterEvent("PLAYER_REGEN_ENABLED")
+--f:RegisterEvent("PLAYER_REGEN_DISABLED")
+--f:RegisterEvent("PLAYER_XP_UPDATE")
+--f:RegisterEvent("PLAYER_TARGET_CHANGED")
+--f:RegisterEvent("GLOBAL_MOUSE_DOWN")
+--f:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+--
+---- OnEvent handler
+--f:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, ...)
+--    if event == "PLAYER_REGEN_ENABLED" then
+--        combat = "○"  -- Change combat state to out of combat
+--        message = combat .. target .. casting .. not_facing .. out_of_range
+--    elseif event == "PLAYER_REGEN_DISABLED" then
+--        combat = "■"
+--        message = combat .. target .. casting .. not_facing .. out_of_range
+--    elseif event == "PLAYER_TARGET_CHANGED" then
+--        name = UnitName("target")
+--        target = "○"
+--        not_facing = "○"
+--        out_of_range = "○"
+--        if name ~= nil then
+--            target = "■"
+--            not_facing = "○"
+--        end
+--        message = combat .. target .. casting .. not_facing .. out_of_range
+--    elseif event == "PLAYER_XP_UPDATE" then
+--        reward_a = "■"
+--        message = combat .. target .. casting .. not_facing .. out_of_range
+--    elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
+--        if arg1 == "player" then
+--                if arg3 == 116 then
+--                    casting = "○"
+--                    out_of_range = "○"
+--                    not_facing = "■"
+--                end
+--            end
+--    elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
+--        -- Process combat log events
+--        local _, sub_event, _, _, name, _, _, _, _, _, _, spellID, _, _, info = CombatLogGetCurrentEventInfo()
+--
+----        -- Only process the event if it's relevant
+----        if sub_event == "PARTY_KILL" then
+----            print("■")
+----        end
+--        if name == "Botinha" and (sub_event ~= "SPELL_AURA_REMOVED" and sub_event ~= "SPELL_AURA_REFRESH" and sub_event ~= "SPELL_AURA_APPLIED" and sub_event ~= "SPELL_DAMAGE") then
+--            if info == "Target needs to be in front of you" then
+--                not_facing = "■"
+--            end
+--            if info == "Out of range" then
+--                out_of_range = "■"
+--                not_facing = "○"
+--            end
+--            if info == "No target" then
+--                target = "○"
+--                casting = "○"
+--                out_of_range = "○"
+--                not_facing = "○"
+--            end
+--            if info == "Interrupted" then
+--                casting = "○"
+--            end
+--            if info == "Not enough mana" then
+--                casting = "○"
+--                out_of_range = "○"
+--            end
+--            if info == "Invalid target" then
+--                target = "■"
+--                out_of_range = "○"
+--            end
+--            if info == "Target needs to be in front of you" then
+--                not_facing = "■"
+--                out_of_range = "○"
+--                casting = "○"
+--            end
+--            if sub_event == "SPELL_CAST_START" then
+--                not_facing = "○"
+--                out_of_range = "○"
+--                target = "■"
+--                casting = "■"
+--            end
+--            if sub_event == "SPELL_CAST_FAILED" then
+--                casting = "○"
+--            end
+--            if sub_event == "SPELL_CAST_SUCCESS" then
+--                reward_b = "■"
+--                casting = "○"
+--                message = combat .. target .. casting .. not_facing .. out_of_range
+--            end
+--            message = combat .. target .. casting .. not_facing .. out_of_range
+--            if info then
+--                message = combat .. target .. casting .. not_facing .. out_of_range
+--            end
+--        end
+--        elseif event == "GLOBAL_MOUSE_DOWN" then
+--            message = combat .. target .. casting .. not_facing .. out_of_range
+--            logMessage(message .. reward_a .. reward_b)
+--            reward_a = "○"
+--            reward_b = "○"
+--            printMessages()
+--    end
+--end)
+----○◙
+---- Example of printing stored messages (you can call this as needed)
+--
+--
+----Vespasianus 
+----Lucylight
+----Scantron
+----Terrysuffers
+----terranigma
+----hardcorehank
+----mcsneakyolo
+----lunabolt
