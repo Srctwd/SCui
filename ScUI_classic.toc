@@ -1,0 +1,7 @@
+## Interface: 11509
+## Title: ScUI
+## Notes: Minimal dark skin for the default UI (Classic Era)
+## Author: Srctwd
+## Version: 2.0
+
+ScUI.lua

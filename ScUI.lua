@@ -1,477 +1,330 @@
-local function Hide()
+-- ScUI - minimal dark skin for the default Blizzard UI.
+-- Written defensively for WoW Forever: every Blizzard frame is looked up by
+-- name and checked for nil before use, so a frame that is missing or renamed
+-- in this client is skipped instead of throwing an error.
 
-    exp_bar_hight = 8
+local ADDON = ...
+local ScUI = {}
 
-    MainMenuBar:SetScale(0.9)
-	MainMenuBarLeftEndCap:Hide()
-    MainMenuBarRightEndCap:Hide()
-    MainMenuBarTexture0:Hide()
-    MainMenuBarTexture1:Hide()
-    MainMenuBarTexture2:Hide()
-    MainMenuBarTexture3:Hide()
-    MainMenuXPBarTexture0:Hide()
-    MainMenuXPBarTexture1:Hide()
-    MainMenuXPBarTexture2:Hide()
-    MainMenuXPBarTexture3:Hide()
+------------------------------------------------------------------------------
+-- Config
+------------------------------------------------------------------------------
+local C = {
+    frameColor   = { 0.21, 0.21, 0.42, 0.9 },  -- unit frame borders
+    darkColor    = { 0.21, 0.21, 0.21, 1 },    -- cast bar / clock borders
+    minimapColor = { 0, 0, 0.21 },
+    portrait     = { 0.9, 0.9, 0.9, 0.82 },
+    xpBarHeight  = 8,
+    xpBarWidth   = 1010,
+    iconCrop     = 0.08,
+    actionBarScale = 0.9,
+    castBarScale   = 0.8,
+    castBarWidth   = 130,
+    partyScale     = 1.2,
+    minimapScale   = 0.87,
+}
 
-    MainMenuBarPerformanceBarFrame:Hide()
+local TEX_PATH  = "Interface\\AddOns\\" .. (ADDON or "ScUI") .. "\\Textures\\"
+local TEX_PLAIN = TEX_PATH .. "UI-TargetingFrame-NoMana.blp"
+local TEX_ELITE = TEX_PATH .. "UI-TargetingFrame-EliteE.blp"
 
-    MainMenuExpBar:ClearAllPoints()
-    MainMenuExpBar:SetPoint("BOTTOM",0,44)
-    MainMenuExpBar:SetWidth(1010)
-    MainMenuExpBar:SetHeight(exp_bar_hight)
-    ExhaustionLevelFillBar:SetHeight(exp_bar_hight)
-    ExhaustionTick:SetAlpha(0)
+------------------------------------------------------------------------------
+-- Safe helpers
+------------------------------------------------------------------------------
+local function F(name) return _G[name] end
 
-
-    KeyRingButton:SetAlpha(0)
-    MainMenuMicroButton:SetAlpha(0)
-    TalentMicroButton:SetAlpha(0)
-    HelpMicroButton:SetAlpha(0)
-    WorldMapMicroButton:SetAlpha(0)
-    SocialsMicroButton:SetAlpha(0)
-    QuestLogMicroButton:SetAlpha(0)
-    SpellbookMicroButton:SetAlpha(0)
-    CharacterMicroButton:SetAlpha(0)
-    FriendsMicroButton:SetAlpha(0)
-
-
-
-
-    --Icons
-
-    MultiBarBottomLeftButton1FloatingBG:Hide()
-    MultiBarBottomLeftButton2FloatingBG:Hide()
-    MultiBarBottomLeftButton3FloatingBG:Hide()
-    MultiBarBottomLeftButton4FloatingBG:Hide()
-    MultiBarBottomLeftButton5FloatingBG:Hide()
-    MultiBarBottomLeftButton6FloatingBG:Hide()
-    MultiBarBottomLeftButton7FloatingBG:Hide()
-    MultiBarBottomLeftButton8FloatingBG:Hide()
-    MultiBarBottomLeftButton9FloatingBG:Hide()
-    MultiBarBottomLeftButton10FloatingBG:Hide()
-    MultiBarBottomLeftButton11FloatingBG:Hide()
-    MultiBarBottomLeftButton12FloatingBG:Hide()
-
-    MultiBarBottomRightButton1FloatingBG:Hide()
-    MultiBarBottomRightButton2FloatingBG:Hide()
-    MultiBarBottomRightButton3FloatingBG:Hide()
-    MultiBarBottomRightButton4FloatingBG:Hide()
-    MultiBarBottomRightButton5FloatingBG:Hide()
-    MultiBarBottomRightButton6FloatingBG:Hide()
-    MultiBarBottomRightButton7FloatingBG:Hide()
-    MultiBarBottomRightButton8FloatingBG:Hide()
-    MultiBarBottomRightButton9FloatingBG:Hide()
-    MultiBarBottomRightButton10FloatingBG:Hide()
-    MultiBarBottomRightButton11FloatingBG:Hide()
-    MultiBarBottomRightButton12FloatingBG:Hide()
-
-
-
-    MultiBarBottomLeftButton1NormalTexture:SetTexture()
-    MultiBarBottomLeftButton2NormalTexture:SetTexture()
-    MultiBarBottomLeftButton3NormalTexture:SetTexture()
-    MultiBarBottomLeftButton4NormalTexture:SetTexture()
-    MultiBarBottomLeftButton5NormalTexture:SetTexture()
-    MultiBarBottomLeftButton6NormalTexture:SetTexture()
-    MultiBarBottomLeftButton7NormalTexture:SetTexture()
-    MultiBarBottomLeftButton8NormalTexture:SetTexture()
-    MultiBarBottomLeftButton9NormalTexture:SetTexture()
-    MultiBarBottomLeftButton10NormalTexture:SetTexture()
-    MultiBarBottomLeftButton11NormalTexture:SetTexture()
-    MultiBarBottomLeftButton12NormalTexture:SetTexture()
-
-    MultiBarBottomRightButton1NormalTexture:SetTexture()
-    MultiBarBottomRightButton2NormalTexture:SetTexture()
-    MultiBarBottomRightButton3NormalTexture:SetTexture()
-    MultiBarBottomRightButton4NormalTexture:SetTexture()
-    MultiBarBottomRightButton5NormalTexture:SetTexture()
-    MultiBarBottomRightButton6NormalTexture:SetTexture()
-    MultiBarBottomRightButton7NormalTexture:SetTexture()
-    MultiBarBottomRightButton8NormalTexture:SetTexture()
-    MultiBarBottomRightButton9NormalTexture:SetTexture()
-    MultiBarBottomRightButton10NormalTexture:SetTexture()
-    MultiBarBottomRightButton11NormalTexture:SetTexture()
-    MultiBarBottomRightButton12NormalTexture:SetTexture()
-
-    ActionButton1NormalTexture:SetTexture()
-    ActionButton2NormalTexture:SetTexture()
-    ActionButton3NormalTexture:SetTexture()
-    ActionButton4NormalTexture:SetTexture()
-    ActionButton5NormalTexture:SetTexture()
-    ActionButton6NormalTexture:SetTexture()
-    ActionButton7NormalTexture:SetTexture()
-    ActionButton8NormalTexture:SetTexture()
-    ActionButton9NormalTexture:SetTexture()
-    ActionButton10NormalTexture:SetTexture()
-    ActionButton11NormalTexture:SetTexture()
-    ActionButton12NormalTexture:SetTexture()
-
-    
-    
-    MultiBarBottomLeftButton1Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton2Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton3Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton4Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton5Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton6Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton7Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton8Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton9Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton10Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton11Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomLeftButton12Icon:SetTexCoord(.08, .92, .08, .92)
-
-    MultiBarBottomRightButton1Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton2Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton3Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton4Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton5Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton6Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton7Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton8Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton9Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton10Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton11Icon:SetTexCoord(.08, .92, .08, .92)
-    MultiBarBottomRightButton12Icon:SetTexCoord(.08, .92, .08, .92)
-
-    ActionButton1Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton2Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton3Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton4Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton5Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton6Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton7Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton8Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton9Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton10Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton11Icon:SetTexCoord(.08, .92, .08, .92)
-    ActionButton12Icon:SetTexCoord(.08, .92, .08, .92)
-    
-
-    
-    ActionBarUpButton:Hide()
-    ActionBarDownButton:Hide()
-
-
-
-
-    GameTimeFrame:Hide()
-
-    --Minimap
-    Minimap:ClearAllPoints()
-    Minimap:SetPoint("CENTER", MinimapCluster, "CENTER", 32, 32)
-    MinimapZoomIn:SetAlpha(0)
-    MinimapZoomOut:SetAlpha(0)  
-    MinimapBorderTop:SetAlpha(0)
-    MinimapToggleButton:Hide()
-    MinimapZoneText:Hide()
-    Minimap:SetScale(0.87)
-    MinimapBorder:SetAlpha(0.85)
-    MinimapBorder:SetVertexColor(0, 0, 0.21)
-    MinimapBorder:ClearAllPoints()
-    MinimapBorder:SetPoint("CENTER", Minimap ,"CENTER", -40, -20)
-    MinimapBorder:SetTexCoord(0, 1, 0, 1)
-
-    for _, region in ipairs({TimeManagerClockButton:GetRegions()}) do
-        region:SetVertexColor(0.21, 0.21, 0.21, 1)
-        break
-    end
-
-    --[0]:SetVertexColor(0, 0, 0)
-    --Backpack
-    MainMenuBarBackpackButton:SetAlpha(0)
-    CharacterBag0Slot:SetAlpha(0)
-    CharacterBag1Slot:SetAlpha(0)
-    CharacterBag2Slot:SetAlpha(0)
-    CharacterBag3Slot:SetAlpha(0)
-
-    ChatFrame1:SetScale(1)
-    --ChatFrame1:ClearAllPoints()
-    --ChatFrame1:SetPoint("BOTTOMLEFT", PlayerFrame, "BOTTOMLEFT", -50, -400)
-    
-    --CastingBar
-    CastingBarFrame:SetScale(0.8)
-    CastingBarFrame:SetWidth(130)
-    CastingBarFrame.Border:SetScale(0.98)
-    CastingBarFrame:ClearAllPoints()
-    CastingBarFrame:SetPoint("BOTTOMRIGHT", PlayerFrame, "BOTTOMRIGHT", -12, 30)
-    CastingBarFrame.Border:SetVertexColor(0.21, 0.21, 0.21, 1)
-    CastingBarFrame.Icon:Hide()
-    
-
-    --PlayerFrame
-    PlayerFrame:SetScale(1)
-    TargetFrame:SetScale(1)
-    PlayerFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-NoMana.blp")
-    PlayerFrameTexture:SetVertexOffset(1, 37, -7)
-    PlayerFrameTexture:SetVertexOffset(2, 37, -7)
-    PlayerFrameTexture:SetVertexOffset(3, 37, -7)
-    PlayerFrameTexture:SetVertexOffset(4, 37, -7)
-    PlayerFrameTexture:SetVertexColor(0.21, 0.21, 0.42, 0.9)
-
-    PlayerPortrait:SetVertexColor(0.9, 0.9, 0.9, 0.82)
-
-
-
-    PlayerName:ClearAllPoints()
-    PlayerName:SetPoint("CENTER", PlayerFrame, "CENTER", 15, 19)
-    
-    PlayerFrameHealthBar:ClearAllPoints()
-    PlayerFrameHealthBar:SetPoint("RIGHT", PlayerFrame, "RIGHT", -5.6, 18)
-    PlayerFrameHealthBar:SetHeight(16)
-    PlayerFrameHealthBarText:ClearAllPoints()
-    PlayerFrameHealthBarText:SetPoint("CENTER", PlayerFrame, "CENTER", 80, 17.4)
-    
-    PlayerFrameManaBar:ClearAllPoints()
-    PlayerFrameManaBar:SetPoint("RIGHT", PlayerFrame, "RIGHT", -5.5, 3)
-    PlayerFrameManaBarText:SetScale(0.9)
-    PlayerFrameManaBarText:ClearAllPoints()
-    PlayerFrameManaBarText:SetPoint("CENTER", PlayerFrame, "CENTER", 80, 3.4)
-
-    PlayerFrameBackground:SetHeight(28)
-
-    TargetFrameHealthBar:ClearAllPoints()
-    TargetFrameHealthBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 17.5)
-    TargetFrameHealthBar:SetHeight(16)
-
-    TargetFrameManaBar:ClearAllPoints()
-    TargetFrameManaBar:SetPoint("LEFT", TargetFrame, "LEFT", 5.6, 3.8)
-    TargetFrameHealthBar:SetHeight(16)
-
-    TargetFrameSpellBar:ClearAllPoints()
-
-    TargetFrameSpellBar:SetScale(0.8)
-    TargetFrameSpellBar:SetWidth(130)
-    TargetFrameSpellBar.Border:SetScale(0.98)
-    TargetFrameSpellBar.Border:SetVertexColor(0.21, 0.21, 0.21, 1)
-    TargetFrameSpellBar.Icon:Hide()
-
-
-    TargetFrameToTTextureFrameTexture:SetVertexColor(0.21, 0.21, 0.42, 0.9)
-    TargetFrameToT:ClearAllPoints()
-    TargetFrameToT:SetPoint("BOTTOMRIGHT", TargetFrame, "BOTTOMRIGHT", -40, -5)
-
-    TargetFrameTextureFramePVPIcon:SetVertexColor(0.21, 0.21, 0.42, 0.9)
-    TargetFramePortrait:SetVertexColor(0.9, 0.9, 0.9, 0.82)
-
-    --Party Frame
-    PartyMemberFrame1:SetScale(1.2)
-    PartyMemberFrame2:SetScale(1.2)
-    PartyMemberFrame3:SetScale(1.2)
-    PartyMemberFrame4:SetScale(1.2)
-    PartyMemberFrame1Texture:SetVertexColor(0.21,0.21,0.42)
-    PartyMemberFrame2Texture:SetVertexColor(0.21,0.21,0.42)
-    PartyMemberFrame3Texture:SetVertexColor(0.21,0.21,0.42)
-    PartyMemberFrame4Texture:SetVertexColor(0.21,0.21,0.42)
-
-    
+local function hide(name)
+    local f = F(name)
+    if f and f.Hide then f:Hide() end
 end
 
-local function target_frame()
-    if (UnitClassification("target") == "normal") then
-        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-NoMana.blp")
-        TargetFrameTextureFrameTexture:SetVertexOffset(1, -37, -7)
-        TargetFrameTextureFrameTexture:SetVertexOffset(2, -37, -7)
-        TargetFrameTextureFrameTexture:SetVertexOffset(3, -37, -7)
-        TargetFrameTextureFrameTexture:SetVertexOffset(4, -37, -7)
-
-    end
-    if (UnitClassification("target") == "elite") then
-        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-EliteE.blp")    
-        TargetFrameTextureFrameTexture:SetVertexOffset(1, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(2, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(3, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(4, 0, 0)
-    end
-    if (UnitClassification("target") == "worldboss") then
-        TargetFrameTextureFrameTexture:SetTexture("Interface\\AddOns\\ScUI\\Textures\\UI-TargetingFrame-EliteE.blp")    
-        TargetFrameTextureFrameTexture:SetVertexOffset(1, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(2, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(3, 0, 0)
-        TargetFrameTextureFrameTexture:SetVertexOffset(4, 0, 0)
-    end
-
-    TargetFrameTextureFrameTexture:SetVertexColor(0.21, 0.21, 0.42, 0.9)
-    TargetFrameNameBackground:SetAlpha(0)
-    TargetFrameBackground:SetHeight(30)
-    TargetFrameBackground:ClearAllPoints()
-    TargetFrameBackground:SetPoint("CENTER", TargetFrame, "CENTER", -50, 13)
+local function alpha(name, a)
+    local f = F(name)
+    if f and f.SetAlpha then f:SetAlpha(a) end
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-frame:SetScript("OnEvent", Hide)
-
-local frame2 = CreateFrame("Frame")
-frame2:RegisterEvent("PLAYER_TARGET_CHANGED")
-frame2:SetScript("OnEvent", target_frame)
-
---local f = CreateFrame("Frame")
---f:RegisterEvent("PLAYER_REGEN_ENABLED")
---f:RegisterEvent("PLAYER_REGEN_DISABLED")
---f:SetScript("OnEvent", function(self, event)
---	print("1")
---end)
-
-SlashCmdList["CLEAR"] = function()
-    SELECTED_CHAT_FRAME:Clear()
+local function color(obj, c)
+    if type(obj) == "string" then obj = F(obj) end
+    if obj and obj.SetVertexColor then obj:SetVertexColor(c[1], c[2], c[3], c[4] or 1) end
 end
 
-----local function combat_log(self, event)
-----	arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 = CombatLogGetCurrentEventInfo()
-----    if arg5 == "Botinha" then
-----        print(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)
-----    end
-----    --print(arg1, arg2, arg3, arg4, arg5)
-----end
---
---local f = CreateFrame("Frame")
---f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
---f:RegisterEvent("PLAYER_REGEN_ENABLED")
---f:RegisterEvent("PLAYER_REGEN_DISABLED")
---f:SetScript("OnEvent", combat_log)
---
---
---local messages = {} -- Table to store messages
---
---local function logMessage(message)
---    table.insert(messages, message) -- Add the message to the table
---end
---
---local function printMessages()
---    if #messages > 0 then
---        print(table.concat(messages, " | ")) -- Concatenate messages with " | " as the separator
---        messages = {}
---    else
---        print("No messages to display.")
---    end
---end
---
---local f = CreateFrame("Frame")
----- No need for 'global', just declare the variable
---message = {"","","","",""}  -- Same for 'message'
---combat = "○" --ok
---casting = "○" --ok
---not_facing = "○" --ok
---out_of_range = "○"
---target = "○"
---kills = "○"
---reward_a = "■"
---reward_b = "■"
---
----- Register events
---f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
---f:RegisterEvent("PLAYER_REGEN_ENABLED")
---f:RegisterEvent("PLAYER_REGEN_DISABLED")
---f:RegisterEvent("PLAYER_XP_UPDATE")
---f:RegisterEvent("PLAYER_TARGET_CHANGED")
---f:RegisterEvent("GLOBAL_MOUSE_DOWN")
---f:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
---
----- OnEvent handler
---f:SetScript("OnEvent", function(self, event, arg1, arg2, arg3, ...)
---    if event == "PLAYER_REGEN_ENABLED" then
---        combat = "○"  -- Change combat state to out of combat
---        message = combat .. target .. casting .. not_facing .. out_of_range
---    elseif event == "PLAYER_REGEN_DISABLED" then
---        combat = "■"
---        message = combat .. target .. casting .. not_facing .. out_of_range
---    elseif event == "PLAYER_TARGET_CHANGED" then
---        name = UnitName("target")
---        target = "○"
---        not_facing = "○"
---        out_of_range = "○"
---        if name ~= nil then
---            target = "■"
---            not_facing = "○"
---        end
---        message = combat .. target .. casting .. not_facing .. out_of_range
---    elseif event == "PLAYER_XP_UPDATE" then
---        reward_a = "■"
---        message = combat .. target .. casting .. not_facing .. out_of_range
---    elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
---        if arg1 == "player" then
---                if arg3 == 116 then
---                    casting = "○"
---                    out_of_range = "○"
---                    not_facing = "■"
---                end
---            end
---    elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
---        -- Process combat log events
---        local _, sub_event, _, _, name, _, _, _, _, _, _, spellID, _, _, info = CombatLogGetCurrentEventInfo()
---
-----        -- Only process the event if it's relevant
-----        if sub_event == "PARTY_KILL" then
-----            print("■")
-----        end
---        if name == "Botinha" and (sub_event ~= "SPELL_AURA_REMOVED" and sub_event ~= "SPELL_AURA_REFRESH" and sub_event ~= "SPELL_AURA_APPLIED" and sub_event ~= "SPELL_DAMAGE") then
---            if info == "Target needs to be in front of you" then
---                not_facing = "■"
---            end
---            if info == "Out of range" then
---                out_of_range = "■"
---                not_facing = "○"
---            end
---            if info == "No target" then
---                target = "○"
---                casting = "○"
---                out_of_range = "○"
---                not_facing = "○"
---            end
---            if info == "Interrupted" then
---                casting = "○"
---            end
---            if info == "Not enough mana" then
---                casting = "○"
---                out_of_range = "○"
---            end
---            if info == "Invalid target" then
---                target = "■"
---                out_of_range = "○"
---            end
---            if info == "Target needs to be in front of you" then
---                not_facing = "■"
---                out_of_range = "○"
---                casting = "○"
---            end
---            if sub_event == "SPELL_CAST_START" then
---                not_facing = "○"
---                out_of_range = "○"
---                target = "■"
---                casting = "■"
---            end
---            if sub_event == "SPELL_CAST_FAILED" then
---                casting = "○"
---            end
---            if sub_event == "SPELL_CAST_SUCCESS" then
---                reward_b = "■"
---                casting = "○"
---                message = combat .. target .. casting .. not_facing .. out_of_range
---            end
---            message = combat .. target .. casting .. not_facing .. out_of_range
---            if info then
---                message = combat .. target .. casting .. not_facing .. out_of_range
---            end
---        end
---        elseif event == "GLOBAL_MOUSE_DOWN" then
---            message = combat .. target .. casting .. not_facing .. out_of_range
---            logMessage(message .. reward_a .. reward_b)
---            reward_a = "○"
---            reward_b = "○"
---            printMessages()
---    end
---end)
-----○◙
----- Example of printing stored messages (you can call this as needed)
---
---
-----Vespasianus 
-----Lucylight
-----Scantron
-----Terrysuffers
-----terranigma
-----hardcorehank
-----mcsneakyolo
-----lunabolt
+local function place(obj, ...)
+    if type(obj) == "string" then obj = F(obj) end
+    if obj and obj.ClearAllPoints then
+        obj:ClearAllPoints()
+        obj:SetPoint(...)
+    end
+    return obj
+end
+
+local function vertexOffset(tex, x, y)
+    if tex and tex.SetVertexOffset then
+        for i = 1, 4 do tex:SetVertexOffset(i, x, y) end
+    end
+end
+
+------------------------------------------------------------------------------
+-- Action bars
+------------------------------------------------------------------------------
+local BAR_PREFIXES = { "ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton" }
+
+local function SkinActionBars()
+    local mmb = F("MainMenuBar")
+    if mmb then mmb:SetScale(C.actionBarScale) end
+
+    for _, n in ipairs({ "MainMenuBarLeftEndCap", "MainMenuBarRightEndCap",
+                          "MainMenuBarPerformanceBarFrame",
+                          "ActionBarUpButton", "ActionBarDownButton" }) do
+        hide(n)
+    end
+    for i = 0, 3 do
+        hide("MainMenuBarTexture" .. i)
+        hide("MainMenuXPBarTexture" .. i)
+    end
+
+    local crop = C.iconCrop
+    for _, prefix in ipairs(BAR_PREFIXES) do
+        for i = 1, 12 do
+            local b = prefix .. i
+            hide(b .. "FloatingBG")
+            local nt = F(b .. "NormalTexture")
+            if nt then nt:SetTexture(nil) end
+            local icon = F(b .. "Icon")
+            if icon then icon:SetTexCoord(crop, 1 - crop, crop, 1 - crop) end
+        end
+    end
+end
+
+local function SkinXPBar()
+    local xp = place("MainMenuExpBar", "BOTTOM", UIParent, "BOTTOM", 0, 44)
+    if xp then
+        xp:SetWidth(C.xpBarWidth)
+        xp:SetHeight(C.xpBarHeight)
+    end
+    local rest = F("ExhaustionLevelFillBar")
+    if rest then rest:SetHeight(C.xpBarHeight) end
+    alpha("ExhaustionTick", 0)
+end
+
+local MICRO_BUTTONS = {
+    "CharacterMicroButton", "SpellbookMicroButton", "TalentMicroButton",
+    "QuestLogMicroButton", "SocialsMicroButton", "WorldMapMicroButton",
+    "MainMenuMicroButton", "HelpMicroButton", "FriendsMicroButton",
+    "KeyRingButton",
+}
+
+local BAG_BUTTONS = {
+    "MainMenuBarBackpackButton",
+    "CharacterBag0Slot", "CharacterBag1Slot", "CharacterBag2Slot", "CharacterBag3Slot",
+}
+
+local function HideMenus()
+    for _, n in ipairs(MICRO_BUTTONS) do alpha(n, 0) end
+    for _, n in ipairs(BAG_BUTTONS) do alpha(n, 0) end
+end
+
+------------------------------------------------------------------------------
+-- Minimap
+------------------------------------------------------------------------------
+local function SkinMinimap()
+    hide("GameTimeFrame")
+    hide("MinimapToggleButton")
+    hide("MinimapZoneText")
+    alpha("MinimapZoomIn", 0)
+    alpha("MinimapZoomOut", 0)
+    alpha("MinimapBorderTop", 0)
+
+    local mm, cluster = F("Minimap"), F("MinimapCluster")
+    if mm and cluster then
+        place(mm, "CENTER", cluster, "CENTER", 32, 32)
+        mm:SetScale(C.minimapScale)
+    end
+
+    local border = F("MinimapBorder")
+    if border and mm then
+        border:SetAlpha(0.85)
+        color(border, C.minimapColor)
+        place(border, "CENTER", mm, "CENTER", -40, -20)
+        border:SetTexCoord(0, 1, 0, 1)
+    end
+end
+
+-- The clock is load-on-demand (Blizzard_TimeManager), so skin it when it shows up.
+local function SkinClock()
+    local clock = F("TimeManagerClockButton")
+    if not clock then return false end
+    local region = clock:GetRegions()
+    color(region, C.darkColor)
+    return true
+end
+
+------------------------------------------------------------------------------
+-- Cast bars
+------------------------------------------------------------------------------
+local function SkinCastBar(bar)
+    if not bar then return end
+    bar:SetScale(C.castBarScale)
+    bar:SetWidth(C.castBarWidth)
+    if bar.Border then
+        bar.Border:SetScale(0.98)
+        color(bar.Border, C.darkColor)
+    end
+    if bar.Icon then bar.Icon:Hide() end
+end
+
+------------------------------------------------------------------------------
+-- Unit frames
+------------------------------------------------------------------------------
+local function SkinPlayerFrame()
+    local pf = F("PlayerFrame")
+    if not pf then return end
+
+    local tex = F("PlayerFrameTexture")
+    if tex then
+        tex:SetTexture(TEX_PLAIN)
+        vertexOffset(tex, 37, -7)
+        color(tex, C.frameColor)
+    end
+    color("PlayerPortrait", C.portrait)
+
+    place("PlayerName", "CENTER", pf, "CENTER", 15, 19)
+
+    local hp = place("PlayerFrameHealthBar", "RIGHT", pf, "RIGHT", -5.6, 18)
+    if hp then hp:SetHeight(16) end
+    place("PlayerFrameHealthBarText", "CENTER", pf, "CENTER", 80, 17.4)
+
+    place("PlayerFrameManaBar", "RIGHT", pf, "RIGHT", -5.5, 3)
+    local mpText = place("PlayerFrameManaBarText", "CENTER", pf, "CENTER", 80, 3.4)
+    if mpText then mpText:SetScale(0.9) end
+
+    local bg = F("PlayerFrameBackground")
+    if bg then bg:SetHeight(28) end
+
+    local cast = F("CastingBarFrame") or F("PlayerCastingBarFrame")
+    SkinCastBar(cast)
+    place(cast, "BOTTOMRIGHT", pf, "BOTTOMRIGHT", -12, 30)
+end
+
+local function SkinTargetFrameStatic()
+    local tf = F("TargetFrame")
+    if not tf then return end
+
+    local hp = place("TargetFrameHealthBar", "LEFT", tf, "LEFT", 5.6, 17.5)
+    if hp then hp:SetHeight(16) end
+    place("TargetFrameManaBar", "LEFT", tf, "LEFT", 5.6, 3.8)
+
+    SkinCastBar(F("TargetFrameSpellBar"))
+
+    color("TargetFrameToTTextureFrameTexture", C.frameColor)
+    place("TargetFrameToT", "BOTTOMRIGHT", tf, "BOTTOMRIGHT", -40, -5)
+
+    color("TargetFrameTextureFramePVPIcon", C.frameColor)
+    color("TargetFramePortrait", C.portrait)
+end
+
+-- Elite / rare-elite / world boss get the dragon border; everything else plain.
+local ELITE = { elite = true, rareelite = true, worldboss = true }
+
+local function SkinTargetFrameDynamic()
+    local tf  = F("TargetFrame")
+    local tex = F("TargetFrameTextureFrameTexture")
+    if not (tf and tex) then return end
+
+    if ELITE[UnitClassification("target") or ""] then
+        tex:SetTexture(TEX_ELITE)
+        vertexOffset(tex, 0, 0)
+    else
+        tex:SetTexture(TEX_PLAIN)
+        vertexOffset(tex, -37, -7)
+    end
+    color(tex, C.frameColor)
+
+    alpha("TargetFrameNameBackground", 0)
+    local bg = F("TargetFrameBackground")
+    if bg then
+        bg:SetHeight(30)
+        place(bg, "CENTER", tf, "CENTER", -50, 13)
+    end
+end
+
+local function SkinPartyFrames()
+    for i = 1, 4 do
+        local f = F("PartyMemberFrame" .. i)
+        if f then f:SetScale(C.partyScale) end
+        color("PartyMemberFrame" .. i .. "Texture", C.frameColor)
+    end
+end
+
+------------------------------------------------------------------------------
+-- Apply (deferred out of combat: most of these frames are protected)
+------------------------------------------------------------------------------
+local pending = false
+
+function ScUI.Apply()
+    if InCombatLockdown() then
+        pending = true
+        return
+    end
+    pending = false
+
+    SkinActionBars()
+    SkinXPBar()
+    HideMenus()
+    SkinMinimap()
+    SkinClock()
+    SkinPlayerFrame()
+    SkinTargetFrameStatic()
+    SkinTargetFrameDynamic()
+    SkinPartyFrames()
+end
+
+------------------------------------------------------------------------------
+-- Events
+------------------------------------------------------------------------------
+local ev = CreateFrame("Frame")
+ev:RegisterEvent("PLAYER_ENTERING_WORLD")
+ev:RegisterEvent("PLAYER_REGEN_ENABLED")
+ev:RegisterEvent("PLAYER_TARGET_CHANGED")
+ev:RegisterEvent("UNIT_CLASSIFICATION_CHANGED")
+ev:RegisterEvent("ADDON_LOADED")
+
+local clockSkinned = false
+
+ev:SetScript("OnEvent", function(_, event, arg1)
+    if event == "PLAYER_ENTERING_WORLD" then
+        ScUI.Apply()
+    elseif event == "PLAYER_REGEN_ENABLED" then
+        if pending then ScUI.Apply() end
+    elseif event == "PLAYER_TARGET_CHANGED" then
+        SkinTargetFrameDynamic()
+    elseif event == "UNIT_CLASSIFICATION_CHANGED" then
+        if arg1 == "target" then SkinTargetFrameDynamic() end
+    elseif event == "ADDON_LOADED" then
+        if arg1 == "Blizzard_TimeManager" and not clockSkinned then
+            clockSkinned = SkinClock()
+        end
+    end
+end)
+
+-- Blizzard re-sets the target border texture on its own; re-apply ours after it.
+if type(TargetFrame_CheckClassification) == "function" then
+    hooksecurefunc("TargetFrame_CheckClassification", SkinTargetFrameDynamic)
+end
+
+------------------------------------------------------------------------------
+-- Slash commands
+------------------------------------------------------------------------------
+SLASH_SCUICLEAR1 = "/clear"
+SlashCmdList["SCUICLEAR"] = function()
+    local cf = SELECTED_CHAT_FRAME or DEFAULT_CHAT_FRAME
+    if cf and cf.Clear then cf:Clear() end
+end
+
+SLASH_SCUI1 = "/scui"
+SlashCmdList["SCUI"] = function()
+    ScUI.Apply()
+    print(pending and "|cff6b6bd6ScUI|r: will re-apply after combat."
+                   or "|cff6b6bd6ScUI|r: re-applied.")
+end
+
+_G.ScUI = ScUI

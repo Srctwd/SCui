@@ -1,4 +1,15 @@
-## Interface: 11501
+## Interface: 16001
+## Title: ScUI
+## Notes: Minimal dark skin for the default UI (WoW Forever)
 ## Author: Srctwd
+## Version: 2.0
 
-ScUI.lua
+Forever\Core.lua
+Forever\CastBars.lua
+Forever\ActionBars.lua
+Forever\MicroMenu.lua
+Forever\Bags.lua
+Forever\Minimap.lua
+Forever\UnitFrames.lua
+Forever\Init.lua
+Forever\Commands.lua
