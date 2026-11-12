@@ -83,6 +83,16 @@ function ns.hideArt(obj)
     ns.alpha(obj, 0)
 end
 
+-- Hide and keep hidden: Blizzard code re-Shows some objects on updates.
+-- Only for non-protected objects (textures, or frames outside the secure tree).
+function ns.forceHide(obj)
+    if not (obj and obj.Hide) or obj.scuiHidden then return end
+    obj.scuiHidden = true
+    obj:Hide()
+    hooksecurefunc(obj, "Show", obj.Hide)
+    hooksecurefunc(obj, "SetShown", obj.Hide)
+end
+
 -- Hidden until hovered (micro menu, bags bar).
 function ns.FadeOnHover(container)
     if not container or container.ScUIFade then return end

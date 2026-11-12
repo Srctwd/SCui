@@ -10,6 +10,7 @@ function ScUI.Apply()
     ns.SkinMicroMenu()
     ns.SkinBags()
     ns.SkinMinimap()
+    ns.SkinBuffs()
     ns.SkinPlayerFrame()
     ns.SkinPet()
     ns.SkinTargets()
@@ -27,6 +28,7 @@ ev:RegisterEvent("UNIT_EXITED_VEHICLE")
 ev:RegisterEvent("EDIT_MODE_LAYOUTS_UPDATED")
 ev:RegisterEvent("UNIT_PET")
 ev:RegisterEvent("INSTANCE_ENCOUNTER_ENGAGE_UNIT")
+ev:RegisterEvent("ADDON_LOADED")
 
 ev:SetScript("OnEvent", function(_, event, unit)
     if event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_FOCUS_CHANGED" then
@@ -35,6 +37,8 @@ ev:SetScript("OnEvent", function(_, event, unit)
         ns.SkinParty()
     elseif event == "UNIT_PET" then
         if unit == "player" then ns.SkinPet() else ns.SkinParty() end
+    elseif event == "ADDON_LOADED" then
+        if unit == "Blizzard_TimeManager" then ns.SkinMinimap() end
     elseif event == "INSTANCE_ENCOUNTER_ENGAGE_UNIT" then
         ns.SkinBoss()
     elseif event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITED_VEHICLE" then

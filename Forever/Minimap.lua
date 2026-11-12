@@ -23,4 +23,14 @@ function ns.SkinMinimap()
         end
     end
     color(ScUI.dielBorder, C.darkColor)
+
+    -- The clock sits inside BorderTop, which is faded out above; keep it visible.
+    -- Blizzard_TimeManager is load-on-demand, so this also runs on ADDON_LOADED.
+    local clock = get("TimeManagerClockButton")
+    if clock and clock.SetIgnoreParentAlpha then clock:SetIgnoreParentAlpha(true) end
+end
+
+-- Buff frame: hide the collapse/expand toggle (Blizzard re-Shows it as auras change).
+function ns.SkinBuffs()
+    ns.forceHide(get("BuffFrame.CollapseAndExpandButton"))
 end

@@ -36,7 +36,35 @@ end
 ------------------------------------------------------------------------------
 -- Player / pet
 ------------------------------------------------------------------------------
+
+-- Blizzard places the player level 1px too far right. Nudge every anchor it
+-- sets, from Blizzard's own offsets each time, so it never drifts.
+local LEVEL_NUDGE_X = -1
+
+local function NudgePoint(fs, point)
+    for i = 1, fs:GetNumPoints() do
+        local p, rel, rp, x, y = fs:GetPoint(i)
+        if not point or p == point then
+            fs.scuiBusy = true
+            fs:SetPoint(p, rel, rp, (x or 0) + LEVEL_NUDGE_X, y or 0)
+            fs.scuiBusy = false
+        end
+    end
+end
+
+local function NudgePlayerLevel()
+    local fs = get("PlayerLevelText",
+        "PlayerFrame.PlayerFrameContent.PlayerFrameContentMain.LevelText")
+    if not fs or fs.scuiNudged then return end
+    fs.scuiNudged = true
+    NudgePoint(fs)
+    hooksecurefunc(fs, "SetPoint", function(self, point)
+        if not self.scuiBusy then NudgePoint(self, point) end
+    end)
+end
+
 function ns.SkinPlayerFrame()
+    NudgePlayerLevel()
     lockColor(get("PlayerFrame.PlayerFrameContainer.FrameTexture"), C.frameColor)
     lockColor(get("PlayerFrame.PlayerFrameContainer.AlternatePowerFrameTexture"), C.frameColor)
     lockColor(get("PlayerFrame.PlayerFrameContainer.VehicleFrameTexture"), C.frameColor)
