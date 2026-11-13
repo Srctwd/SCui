@@ -34,3 +34,20 @@ end
 function ns.SkinBuffs()
     ns.forceHide(get("BuffFrame.CollapseAndExpandButton"))
 end
+
+-- Chat: hide the bottom border strip of the main chat window (Blizzard fades
+-- it in on hover, so it has to stay hidden rather than just transparent).
+function ns.SkinChat()
+    ns.forceHide(get("ChatFrame1BottomTexture"))
+    -- Edit box border art only; the box itself still works for typing.
+    local eb = get("ChatFrame1.EditBox", "ChatFrame1EditBox")
+    if eb then
+        for _, piece in ipairs({ "Left", "Mid", "Right" }) do
+            hideArt(_G["ChatFrame1EditBox" .. piece])
+        end
+        -- Focus border is re-Shown each time the box gains focus.
+        ns.forceHide(eb.focusLeft)
+        ns.forceHide(eb.focusMid)
+        ns.forceHide(eb.focusRight)
+    end
+end

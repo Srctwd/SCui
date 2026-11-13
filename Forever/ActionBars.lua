@@ -66,6 +66,28 @@ local function SkinButton(b)
     b.ScUISkinned = true
 end
 
+-- Hide every texture under a status-tracking (XP/rep) container: background,
+-- dividers, rested fill, rested tick, gain overlay. Only the bar fills stay.
+local function HideBarArt(frame)
+    local keep = frame.GetStatusBarTexture and frame:GetStatusBarTexture()
+    for _, region in ipairs({ frame:GetRegions() }) do
+        if region:IsObjectType("Texture") and region ~= keep then hideArt(region) end
+    end
+    for _, child in ipairs({ frame:GetChildren() }) do
+        HideBarArt(child)
+    end
+end
+
+-- Segment dividers are unnamed child frames of the container
+-- (MainStatusTrackingBarContainer.<address>.BarDividerTexture), created and
+-- re-shown by Blizzard as the bar changes. Hide each texture and hook its
+-- Show so it stays hidden; rescan for new ones whenever the bars update.
+local function HideDividers(container)
+    for _, child in ipairs({ container:GetChildren() }) do
+        ns.forceHide(child.BarDividerTexture)
+    end
+end
+
 function ns.SkinActionBars()
     local bar = get("MainActionBar", "MainMenuBar")   -- renamed in 12.x
     if bar then
@@ -90,6 +112,39 @@ function ns.SkinActionBars()
     for _, prefix in ipairs(BAR_PREFIXES) do
         for i = 1, 12 do
             SkinButton(_G[prefix .. i])
+        end
+    end
+    -- Experience / reputation bars: drop the frame border around the bar.
+    for _, name in ipairs({ "MainStatusTrackingBarContainer", "SecondaryStatusTrackingBarContainer" }) do
+        local container = _G[name]
+        if container then
+            ns.forceHide(container.BarFrameTexture)
+            HideBarArt(container)
+            HideDividers(container)
+            if not container.scuiDividers then
+                container.scuiDividers = true
+                local rescan = function() HideDividers(container) end
+                container:HookScript("OnShow", rescan)
+                container:HookScript("OnSizeChanged", rescan)
+                local ev = CreateFrame("Frame")
+                for _, e in ipairs({ "PLAYER_ENTERING_WORLD", "PLAYER_XP_UPDATE",
+                    "PLAYER_LEVEL_UP", "UPDATE_EXHAUSTION", "UPDATE_FACTION",
+                    "PLAYER_UPDATE_RESTING" }) do
+                    ev:RegisterEvent(e)
+                end
+                -- Run after Blizzard's own handlers have laid the bar out.
+                ev:SetScript("OnEvent", function() C_Timer.After(0, rescan) end)
+            end
+            -- Rested-XP tick marker lives on the unnamed XP bar child
+            -- (MainStatusTrackingBarContainer.?.ExhaustionTick). Guarded so a
+            -- failure here can't stop the rest of the skinning.
+            pcall(function()
+                for _, bar in ipairs({ container:GetChildren() }) do
+                    if type(bar) == "table" and bar.ExhaustionTick then
+                        ns.forceHide(bar.ExhaustionTick)
+                    end
+                end
+            end)
         end
     end
 end
